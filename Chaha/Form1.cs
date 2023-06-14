@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,6 +14,14 @@ namespace Chaha
 {
     public partial class Form1 : Form
     {
+        int l1 = 0, l2 = 1, l3 = 2, l4 = 3, l5 = 4, l6 = 5;
+
+        
+
+        List<string> iphone14_Nazvanie;
+        List<string> iphone14_Img;
+        List<string> iphone14_Cena;
+
         public Form1()
         {
             InitializeComponent();
@@ -19,27 +29,28 @@ namespace Chaha
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Panel panel = GeneratePanel();
-            panel.Location = new Point(panel5.Location.X, panel5.Location.Y + panel5.Size.Height);
-            this.Controls.Add(panel);
+            SetData("https://woap.ru/zapchasti-dlya-iphone/zapchasti-iphone-14-pro-max");
+        }
 
+        public void SetData(string uri)
+        {
             HtmlWeb htmlWeb = new HtmlWeb();
-            HtmlAgilityPack.HtmlDocument document = htmlWeb.Load("https://woap.ru/zapchasti-dlya-iphone/zapchasti-iphone-14-pro-max");
+            HtmlAgilityPack.HtmlDocument document = htmlWeb.Load(uri);
 
             HtmlNodeCollection iphone14_Nazvanie_Nodes = document.DocumentNode.SelectNodes("//div[@class='field-item odd']");
             HtmlNodeCollection iphone14_Img_Nodes = document.DocumentNode.SelectNodes("//div[@class='field field-name-uc-product-image field-type-image field-label-hidden']");
             HtmlNodeCollection iphone14_Cena_Nodes = document.DocumentNode.SelectNodes("//span[@class='uc-price']");
 
-            List<string> iphone14_Nazvanie = new List<string>();
-            List<string> iphone14_Img = new List<string>();
-            List<string> iphone14_Cena = new List<string>();
+            iphone14_Nazvanie = new List<string>();
+            iphone14_Img = new List<string>();
+            iphone14_Cena = new List<string>();
 
-            foreach(var item in iphone14_Nazvanie_Nodes)
+            foreach (var item in iphone14_Nazvanie_Nodes)
             {
                 iphone14_Nazvanie.Add(item.ChildNodes[0].InnerText);
             }
 
-            foreach(var item in iphone14_Img_Nodes)
+            foreach (var item in iphone14_Img_Nodes)
             {
                 iphone14_Img.Add(item.ChildNodes.First().ChildNodes.First().Attributes["src"].Value);
             }
@@ -49,93 +60,107 @@ namespace Chaha
                 iphone14_Cena.Add(item.InnerText);
             }
 
+            
+
             label2.Text = iphone14_Nazvanie[0];
+            label4.Text = iphone14_Nazvanie[1];
+            label6.Text = iphone14_Nazvanie[2];
+            label10.Text = iphone14_Nazvanie[3];
+            label12.Text = iphone14_Nazvanie[4];
+            label14.Text = iphone14_Nazvanie[5];
+
+
             pictureBox1.Load(iphone14_Img[0]);
+            pictureBox2.Load(iphone14_Img[1]);
+            pictureBox3.Load(iphone14_Img[2]);
+            pictureBox5.Load(iphone14_Img[3]);
+            pictureBox6.Load(iphone14_Img[4]);
+            pictureBox7.Load(iphone14_Img[5]);
+
             label3.Text = iphone14_Cena[0];
+            label5.Text = iphone14_Cena[1];
+            label7.Text = iphone14_Cena[2];
+            label11.Text = iphone14_Cena[3];
+            label13.Text = iphone14_Cena[4];
+            label15.Text = iphone14_Cena[5];
+
         }
 
-        public Panel GeneratePanel()
+        private void button1_Click(object sender, EventArgs e)
         {
-            Panel main = new Panel();
-            //main.BorderStyle = BorderStyle.FixedSingle;
-            main.Size = panel5.Size;
+            int pageSize = 6;
 
-            Panel panel1 = new Panel();
-            Panel panel2 = new Panel();
-            Panel panel3 = new Panel();
-            Panel panel4 = new Panel();
+            if(l6 + pageSize <= iphone14_Nazvanie.Count)
+            {
+                l1 += pageSize;
+                l2 += pageSize;
+                l3 += pageSize;
+                l4 += pageSize;
+                l5 += pageSize;
+                l6 += pageSize;
+            }
 
-            PictureBox picture1 = new PictureBox();
-            PictureBox picture2 = new PictureBox();
-            PictureBox picture3 = new PictureBox();
-            PictureBox picture4 = new PictureBox();
+            label2.Text = iphone14_Nazvanie[l1];
+            label4.Text = iphone14_Nazvanie[l2];
+            label6.Text = iphone14_Nazvanie[l3];
+            label10.Text = iphone14_Nazvanie[l4];
+            label12.Text = iphone14_Nazvanie[l5];
+            label14.Text = iphone14_Nazvanie[l6];
 
-            Label label1 = new Label();
-            Label label2 = new Label();
-            Label label3 = new Label();
-            Label label4 = new Label();
 
-            Label clabel1 = new Label();
-            Label clabel2 = new Label();
-            Label clabel3 = new Label();
-            Label clabel4 = new Label();
+            pictureBox1.Load(iphone14_Img[l1]);
+            pictureBox2.Load(iphone14_Img[l2]);
+            pictureBox3.Load(iphone14_Img[l3]);
+            pictureBox5.Load(iphone14_Img[l4]);
+            pictureBox6.Load(iphone14_Img[l5]);
+            pictureBox7.Load(iphone14_Img[l6]);
 
-            panel1.Controls.Add(label1);
-            panel1.Controls.Add(picture1);
-            panel1.Controls.Add(clabel1);
 
-            panel2.Controls.Add(label2);
-            panel2.Controls.Add(picture2);
-            panel2.Controls.Add(clabel2);
+            label3.Text = iphone14_Cena[l1];
+            label5.Text = iphone14_Cena[l2];
+            label7.Text = iphone14_Cena[l3];
+            label11.Text = iphone14_Cena[l4];
+            label13.Text = iphone14_Cena[l5];
+            label15.Text = iphone14_Cena[l6];
 
-            panel3.Controls.Add(label3);
-            panel3.Controls.Add(picture3);
-            panel3.Controls.Add(clabel3);
+        }
 
-            panel4.Controls.Add(label4);
-            panel4.Controls.Add(picture4);
-            panel4.Controls.Add(clabel4);
+        private void button2_Click(object sender, EventArgs e)
+        {
+            int pageSize = 6;
 
-            panel1.Size = this.panel1.Size;
-            panel2.Size = this.panel2.Size;
-            panel3.Size = this.panel3.Size;
-            panel4.Size = this.panel4.Size;
+            if(l6 - pageSize >= 0)
+            {
+                l1 -= pageSize;
+                l2 -= pageSize;
+                l3 -= pageSize;
+                l4 -= pageSize;
+                l5 -= pageSize;
+                l6 -= pageSize;
+            }
 
-            panel1.BorderStyle = BorderStyle.FixedSingle;
-            panel2.BorderStyle = BorderStyle.FixedSingle;
-            panel3.BorderStyle = BorderStyle.FixedSingle;
-            panel4.BorderStyle = BorderStyle.FixedSingle;
+            label2.Text = iphone14_Nazvanie[l1];
+            label4.Text = iphone14_Nazvanie[l2];
+            label6.Text = iphone14_Nazvanie[l3];
+            label10.Text = iphone14_Nazvanie[l4];
+            label12.Text = iphone14_Nazvanie[l5];
+            label14.Text = iphone14_Nazvanie[l6];
 
-            panel1.Margin = new Padding(3);
-            panel2.Margin = new Padding(3);
-            panel3.Margin = new Padding(3);
-            panel4.Margin = new Padding(3);
 
-            panel2.Location = new Point(panel1.Location.X + panel1.Size.Width + 6, panel1.Location.Y);
-            panel3.Location = new Point(panel2.Location.X + panel2.Size.Width + 6, panel2.Location.Y);
-            panel4.Location = new Point(panel3.Location.X + panel3.Size.Width + 6, panel3.Location.Y);
+            pictureBox1.Load(iphone14_Img[l1]);
+            pictureBox2.Load(iphone14_Img[l2]);
+            pictureBox3.Load(iphone14_Img[l3]);
+            pictureBox5.Load(iphone14_Img[l4]);
+            pictureBox6.Load(iphone14_Img[l5]);
+            pictureBox7.Load(iphone14_Img[l6]);
 
-            picture1.Size = pictureBox1.Size; 
-            picture2.Size = pictureBox2.Size;
-            picture3.Size = pictureBox3.Size;
-            picture4.Size = pictureBox4.Size;
 
-            label1.Size = this.label2.Size;
-            label2.Size = this.label4.Size;
-            label3.Size = this.label6.Size;
-            label4.Size = this.label8.Size;
-
-            clabel1.Size = this.label3.Size;
-            clabel2.Size = this.label5.Size;
-            clabel3.Size = this.label7.Size;
-            clabel4.Size = this.label9.Size;
-
-            main.Controls.Add(panel1);
-            main.Controls.Add(panel2);
-            main.Controls.Add(panel3);
-            main.Controls.Add(panel4);
-
-            return main;
+            label3.Text = iphone14_Cena[l1];
+            label5.Text = iphone14_Cena[l2];
+            label7.Text = iphone14_Cena[l3];
+            label11.Text = iphone14_Cena[l4];
+            label13.Text = iphone14_Cena[l5];
+            label15.Text = iphone14_Cena[l6];
         }
     }
 }
